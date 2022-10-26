@@ -4,15 +4,14 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.List;
+
 @Getter
 @Setter
 public class Lote extends Propiedad{
-    private TipoLote tipoLote;
+    private TipoBodegaLote tipo;
 
-    public Lote(String identificador, String direccion, Propietario propietario, Boolean disponible, List<String> fotos,
-                Double precio, Empleado empleado, LocalDateTime fecha, TipoPropiedad tipoPropiedad, TipoLote tipoLote) {
-        super(identificador, direccion, propietario, disponible, fotos, precio, empleado, fecha, tipoPropiedad);
-        this.tipoLote = tipoLote;
+    public Lote(String identificador, String direccion, Propietario propietario, Boolean disponible, Double precio, Empleado empleado, LocalDateTime fecha, DisposicionPropiedad disposicionPropiedad, Float valorArea, Integer numeroPisos, TipoArea area, String tipoPropiedad, TipoBodegaLote tipo) {
+        super(identificador, direccion, propietario, disponible, precio, empleado, fecha, disposicionPropiedad, valorArea, numeroPisos, area, tipoPropiedad);
+        this.tipo = tipo;
     }
 }

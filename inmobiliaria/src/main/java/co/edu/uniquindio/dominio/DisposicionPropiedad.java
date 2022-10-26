@@ -1,5 +1,5 @@
 package co.edu.uniquindio.dominio;
 
-public enum TipoPropiedad {
+public enum DisposicionPropiedad {
     VENTA,ALQUILER
 }
