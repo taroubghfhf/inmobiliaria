@@ -3,6 +3,9 @@ package co.edu.uniquindio.dominio;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Getter
@@ -21,5 +24,32 @@ public class Apartamento extends Vivienda {
         this.piso = piso;
         this.valorAdministracion = valorAdministracion;
         this.numeroParqueaderos = numeroParqueaderos;
+    }
+
+    public boolean registrarApartamento() {
+        try{
+            Conexion cx =  new Conexion();
+            Connection con = cx.getConexion();
+
+            PreparedStatement st = con.prepareStatement("UPDATE propiedad SET" +
+                    "\"numeroHabitaciones\"= "+ this.getNumeroHabitaciones() +", " +
+                    "\"numeroBanos\"= "+ this.getNumeroBanos() +", " +
+                    "balcon= "+ this.getBalcon()+", " +
+                    "ascensor= "+ this.getAscensor()+", " +
+                    "piso= "+ this.getPiso()+", " +
+                    "\"valorAdministracion\"= "+ this.getValorAdministracion()+", " +
+                    "\"tipoPropiedad\"= "+this.getTipoPropiedad()+", "+
+                    "\"numeroParqueaderos\"= "+ this.getNumeroParqueaderos()+" " +
+                    "WHERE id = '"+this.getIdentificador()+"'");
+
+            st.executeUpdate();
+            st.close();
+
+            con.close();
+            return true;
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+            return false;
+        }
     }
 }

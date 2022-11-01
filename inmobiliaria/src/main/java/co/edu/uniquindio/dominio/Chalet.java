@@ -1,7 +1,14 @@
 package co.edu.uniquindio.dominio;
 
+import lombok.Getter;
+import lombok.Setter;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.time.LocalDateTime;
 
+@Getter
+@Setter
 public class Chalet extends Vivienda{
     private Boolean aguaPotable;
     private Boolean alcantarillado;
@@ -18,5 +25,34 @@ public class Chalet extends Vivienda{
         this.internet = internet;
         this.energiaElectrica = energiaElectrica;
         this.gasDomiciliario = gasDomiciliario;
+    }
+
+    public boolean registrarChalet() {
+        try{
+            Conexion cx =  new Conexion();
+            Connection con = cx.getConexion();
+
+            PreparedStatement st = con.prepareStatement("UPDATE propiedad SET" +
+                    "\"numeroHabitaciones\"= "+ this.getNumeroHabitaciones() +", " +
+                    "\"numeroBanos\"= "+ this.getNumeroBanos() +", " +
+                    "material= "+ this.getMaterial()+", " +
+                    "\"aguaPotable\"= "+this.getAguaPotable()+", " +
+                    "\"alcantarillado\"= "+this.getAlcantarillado()+", "+
+                    "\"pozoSeptico\"="+this.getPozoSeptico()+", "+
+                    "internet= "+this.getInternet()+", "+
+                    "\"energiaElectrica\"="+this.getEnergiaElectrica()+", "+
+                    "\"gasDomiciliario\"="+this.getGasDomiciliario()+" " +
+                    "\"tipoPropiedad\"= "+this.getTipoPropiedad()+", "+
+                    "WHERE id = '"+this.getIdentificador()+"'");
+
+            st.executeUpdate();
+            st.close();
+
+            con.close();
+            return true;
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+            return false;
+        }
     }
 }
