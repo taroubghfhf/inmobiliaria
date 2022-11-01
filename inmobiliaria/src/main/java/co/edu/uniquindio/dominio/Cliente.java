@@ -8,8 +8,7 @@ import lombok.Setter;
 @Setter
 public class Cliente extends Persona {
 
-    private String alias;
-    public Cliente(String nombre, String documeto, String celular, String alias) {
+    public Cliente(String nombre, String documeto, String celular) {
         super(nombre, documeto, celular);
 
     }
