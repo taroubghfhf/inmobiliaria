@@ -2,30 +2,20 @@ package co.edu.uniquindio.dominio;
 import static co.edu.uniquindio.utilidades.Validador.validacionMayorCero;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
-public class Vivienda {
+public class Vivienda extends Propiedad{
       private Integer numeroHabitaciones;
       private Integer numeroBanos;
-      private Integer numeroPisos;
       private String material;
-      private Boolean internet;
-      private Boolean aguaPotable;
-      private Boolean gasDomiciliario;
-      private Boolean alcantarillado;
-      private Boolean energia;
 
-    public Vivienda(Integer numeroHabitaciones, Integer numeroBanos, Integer numeroPisos, String material,
-                    Boolean internet, Boolean aguaPotable, Boolean gasDomiciliario, Boolean alcantarillado, Boolean energia) {
-        
+    public Vivienda(String identificador, String direccion, Propietario propietario, Boolean disponible, Double precio, Empleado empleado, LocalDateTime fecha, DisposicionPropiedad disposicionPropiedad, Float valorArea, Integer numeroPisos, TipoArea area, String tipoPropiedad, Integer numeroHabitaciones, Integer numeroBanos, String material) {
+        super(identificador, direccion, propietario, disponible, precio, empleado, fecha, disposicionPropiedad, valorArea, numeroPisos, area, tipoPropiedad);
         this.numeroHabitaciones = numeroHabitaciones;
         this.numeroBanos = numeroBanos;
-        this.numeroPisos = numeroPisos;
         this.material = material;
-        this.internet = internet;
-        this.aguaPotable = aguaPotable;
-        this.gasDomiciliario = gasDomiciliario;
-        this.alcantarillado = alcantarillado;
-        this.energia = energia;
     }
 }

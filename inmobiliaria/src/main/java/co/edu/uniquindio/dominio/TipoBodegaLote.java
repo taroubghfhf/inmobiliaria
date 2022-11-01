@@ -1,6 +1,6 @@
 package co.edu.uniquindio.dominio;
 
-public enum TipoLote {
+public enum TipoBodegaLote {
     RURAL,URBANA
 
 }
