@@ -9,8 +9,7 @@ public class AdministradorControladorTest {
     @Test
     public void registrarEmpleadoExitoso(){
         AdministradorControlador administradorControlador = new AdministradorControlador();
-        Empleado empleado = new Empleado("monica","1094584","311481564"
-                ,null,null,null,null);
+        Empleado empleado = new Empleado("monica","1094584","311481564",null);
         boolean respuesta = administradorControlador.agregarEmpleado(empleado);
         Assertions.assertTrue(respuesta);
     }
@@ -18,8 +17,7 @@ public class AdministradorControladorTest {
     @Test
     public void registrarEmpleadoFallido(){
         AdministradorControlador administradorControlador = new AdministradorControlador();
-        Empleado empleado = new Empleado("juan","123","123",
-                null,null,null, null);
+        Empleado empleado = new Empleado("juan","123","123", null);
         Exception exception = Assertions.assertThrows(RuntimeException.class,
                 () -> administradorControlador.agregarEmpleado(empleado));
         String expectedMessage = "El empleado ya existe";
@@ -30,8 +28,7 @@ public class AdministradorControladorTest {
     @Test
     public void actualizarEmpleadoExitoso(){
         AdministradorControlador administradorControlador = new AdministradorControlador();
-        Empleado empleadoActualizado = new Empleado("juan","123","3104587912",
-                null,null,null, null);
+        Empleado empleadoActualizado = new Empleado("juan","123","3104587912", null);
         boolean respuesta = administradorControlador.actualizarEmpleado(empleadoActualizado);
         Assertions.assertTrue(respuesta);
     }
@@ -39,8 +36,7 @@ public class AdministradorControladorTest {
     @Test
     public void actualizarEmpleadoFallido(){
         AdministradorControlador administradorControlador = new AdministradorControlador();
-        Empleado empleado = new Empleado("juan","45687","123",
-                null,null,null, null);
+        Empleado empleado = new Empleado("juan","45687","123", null);
         Exception exception = Assertions.assertThrows(RuntimeException.class,
                 () -> administradorControlador.actualizarEmpleado(empleado));
         String expectedMessage = "El empleado no existe";

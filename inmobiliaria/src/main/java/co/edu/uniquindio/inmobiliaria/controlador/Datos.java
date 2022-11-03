@@ -1,8 +1,6 @@
 package co.edu.uniquindio.inmobiliaria.controlador;
 
-import co.edu.uniquindio.inmobiliaria.modelo.Administrador;
-import co.edu.uniquindio.inmobiliaria.modelo.Empleado;
-import co.edu.uniquindio.inmobiliaria.modelo.Usuario;
+import co.edu.uniquindio.inmobiliaria.modelo.*;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -13,6 +11,9 @@ public class Datos {
 
     public List<Usuario> usuarios;
     public List<Empleado> empleados;
+    public List<ReportePropiedad> reportes;
+    public List<Propietario> propietarios;
+    public List<Cliente> clientes;
     public Administrador administrador;
 
     private static Datos intancia;
@@ -22,6 +23,8 @@ public class Datos {
         cargarDatosUsuario();
         cargarAdministrador();
         cargarEmpleado();
+        cargarPropietarios();
+        cargarClientes();
     }
 
     public void cargarDatosUsuario(){
@@ -34,11 +37,30 @@ public class Datos {
     }
 
     public void cargarAdministrador(){
-        administrador = new Administrador("pedro","10235486","326468",null,usuarios.get(4));
+        administrador = new Administrador("pedro","10235486","326468",usuarios.get(4));
     }
     public void cargarEmpleado(){
         empleados = new ArrayList<>();
-        empleados.add(new Empleado("juan","123","123",null,null,null, usuarios.get(2)));
+        empleados.add(new Empleado("juan","123","123", usuarios.get(2)));
+    }
+
+    public void cargarReportes(){
+        reportes = new ArrayList<>();
+
+
+    }
+    public void cargarPropietarios(){
+        propietarios = new ArrayList<>();
+        propietarios.add(new Propietario("propietario1","1111","1111"));
+        propietarios.add(new Propietario("propietario2","2222","2222"));
+        propietarios.add(new Propietario("propietario3","3333","3333"));
+    }
+
+    public void cargarClientes(){
+        clientes = new ArrayList<>();
+        clientes.add(new Cliente("cliente1","1111","1111"));
+        clientes.add(new Cliente("cliente2","2222","2222"));
+        clientes.add(new Cliente("cliente3","3333","3333"));
     }
 
 

@@ -1,6 +1,5 @@
 package co.edu.uniquindio.inmobiliaria.utilidad;
 
-import java.util.Optional;
 
 public class Validador {
 
