@@ -1,4 +1,4 @@
-package co.edu.uniquindio.dominio;
+package co.edu.uniquindio.inmobiliaria.utilidad;
 
 import java.sql.*;
 

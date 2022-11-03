@@ -1,5 +1,5 @@
-package co.edu.uniquindio.dominio;
-import static co.edu.uniquindio.utilidades.Validador.validacionMayorCero;
+package co.edu.uniquindio.inmobiliaria.modelo;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class Vivienda extends Propiedad{
+public class Vivienda extends Propiedad {
       private Integer numeroHabitaciones;
       private Integer numeroBanos;
       private String material;

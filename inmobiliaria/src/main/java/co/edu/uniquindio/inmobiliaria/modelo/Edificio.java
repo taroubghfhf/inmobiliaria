@@ -1,5 +1,6 @@
-package co.edu.uniquindio.dominio;
+package co.edu.uniquindio.inmobiliaria.modelo;
 
+import co.edu.uniquindio.inmobiliaria.utilidad.Conexion;
 import lombok.Getter;
 import lombok.Setter;
 
