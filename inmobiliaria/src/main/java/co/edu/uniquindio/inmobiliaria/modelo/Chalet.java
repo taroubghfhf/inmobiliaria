@@ -18,8 +18,8 @@ public class Chalet extends Vivienda{
     private Boolean energiaElectrica;
     private Boolean gasDomiciliario;
 
-    public Chalet(String identificador, String direccion, Boolean disponible, Double precio, Empleado empleado, LocalDateTime fechaCreacion, DisposicionPropiedad disposicionPropiedad, Float valorArea, Integer numeroPisos, TipoArea unidadesArea, String tipoPropiedad, Integer numeroHabitaciones, Integer numeroBanos, String material, Boolean aguaPotable, Boolean alcantarillado, Boolean pozoSeptico, Boolean internet, Boolean energiaElectrica, Boolean gasDomiciliario) {
-        super(identificador, direccion, disponible, precio, empleado, fechaCreacion, disposicionPropiedad, valorArea, numeroPisos, unidadesArea, tipoPropiedad, numeroHabitaciones, numeroBanos, material);
+    public Chalet(String identificador, String direccion, Boolean disponible, Double precio, Empleado empleado, LocalDateTime fechaCreacion, DisposicionPropiedad disposicionPropiedad, Float valorArea, TipoArea unidadesArea, Integer numeroHabitaciones, Integer numeroBanos, String material, Boolean aguaPotable, Boolean alcantarillado, Boolean pozoSeptico, Boolean internet, Boolean energiaElectrica, Boolean gasDomiciliario) {
+        super(identificador, direccion, disponible, precio, empleado, fechaCreacion, disposicionPropiedad, valorArea, unidadesArea, numeroHabitaciones, numeroBanos, material);
         this.aguaPotable = aguaPotable;
         this.alcantarillado = alcantarillado;
         this.pozoSeptico = pozoSeptico;
@@ -55,7 +55,7 @@ public class Chalet extends Vivienda{
             st2.close();
 
             PreparedStatement st3 = con.prepareStatement("UPDATE propiedad SET" +
-                    "id_vivienda= "+ this.getIdentificador() +", " +
+                    "id_vivienda= "+ this.getIdentificador() +" " +
                     "WHERE id = '"+this.getIdentificador()+"'");
 
             st3.executeUpdate();

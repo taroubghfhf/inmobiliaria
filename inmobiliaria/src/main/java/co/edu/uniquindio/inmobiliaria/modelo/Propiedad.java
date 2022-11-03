@@ -25,7 +25,7 @@ public class Propiedad {
     private String tipoPropiedad = this.getClass().getSimpleName();
     private Cliente cliente;
 
-    public Propiedad(String identificador, String direccion, Boolean disponible, Double precio, Empleado empleado, LocalDateTime fechaCreacion, DisposicionPropiedad disposicionPropiedad, Float valorArea, Integer numeroPisos, TipoArea unidadesArea, String tipoPropiedad) {
+    public Propiedad(String identificador, String direccion, Boolean disponible, Double precio, Empleado empleado, LocalDateTime fechaCreacion, DisposicionPropiedad disposicionPropiedad, Float valorArea, TipoArea unidadesArea) {
         this.identificador = identificador;
         this.direccion = direccion;
         this.disponible = disponible;
@@ -34,9 +34,7 @@ public class Propiedad {
         this.fechaCreacion = fechaCreacion;
         this.disposicionPropiedad = disposicionPropiedad;
         this.valorArea = valorArea;
-        this.numeroPisos = numeroPisos;
         this.unidadesArea = unidadesArea;
-        this.tipoPropiedad = tipoPropiedad;
     }
 
     public boolean registrarPropiedad(){
@@ -58,7 +56,8 @@ public class Propiedad {
 
             PreparedStatement st2 = con.prepareStatement("INSERT INTO historial_propiedad (id_propiedad, id_empleado) VALUES(?,?)");
             st2.setString(1, this.identificador);
-            st2.setString(2, this.empleado.toString());
+            //st2.setString(2, this.empleado.toString());
+            st2.setString(2, "1");
             st2.executeUpdate();
             st2.close();
 
@@ -77,17 +76,19 @@ public class Propiedad {
                 Connection con = cx.getConexion();
 
                 PreparedStatement st = con.prepareStatement("UPDATE propiedad SET" +
-                        "disposicion_propiedad= "+ this.disposicionPropiedad +", " +
-                        "precio= "+ this.getPrecio() +", " +
+                        "disposicion_propiedad= '"+ this.disposicionPropiedad +"', " +
+                        "precio= "+ this.getPrecio() +" " +
                         "WHERE id = '"+id+"'");
 
                 st.executeUpdate();
                 st.close();
 
                 PreparedStatement st2 = con.prepareStatement("UPDATE historial_propiedad SET" +
-                        "id_cliente= "+ this.cliente.getDocumeto() +" " +
-                        "fecha_modificacion="+this.getFechaModificacion()+" " +
-                        "WHERE id_propiedad = '"+id+"'");
+                        //"id_cliente= "+ this.cliente.getDocumeto() +" " +
+                        "id_cliente= "+ '1' +", " +
+                        "fecha_modificacion='"+this.getFechaModificacion()+"' " +
+                        //"WHERE id_propiedad = '"+id+"'");
+                        "WHERE id_propiedad = "+'1'+"");
 
                 st2.executeUpdate();
                 st2.close();
@@ -118,8 +119,10 @@ public class Propiedad {
                 st.close();
 
                 PreparedStatement st2 = con.prepareStatement("UPDATE historial_propiedad SET" +
-                        "id_propietario= "+ this.propietario.getDocumeto() +" " +
-                        "id_cliente= "+ this.cliente.getDocumeto() +" " +
+                        //"id_propietario= "+ this.propietario.getDocumeto() +" " +
+                        //"id_cliente= "+ this.cliente.getDocumeto() +" " +
+                        "id_propietario= "+ '1' +", " +
+                        "id_cliente= "+ '1' +", " +
                         "fecha_modificacion="+this.getFechaModificacion()+" " +
                         "WHERE id_propiedad = '"+id+"'");
 

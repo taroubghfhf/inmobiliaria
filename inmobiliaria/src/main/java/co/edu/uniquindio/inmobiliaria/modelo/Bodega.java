@@ -14,8 +14,8 @@ public class Bodega extends Propiedad {
 
     private TipoBodegaLote tipo;
 
-    public Bodega(String identificador, String direccion, Boolean disponible, Double precio, Empleado empleado, LocalDateTime fechaCreacion, DisposicionPropiedad disposicionPropiedad, Float valorArea, Integer numeroPisos, TipoArea unidadesArea, String tipoPropiedad, TipoBodegaLote tipo) {
-        super(identificador, direccion, disponible, precio, empleado, fechaCreacion, disposicionPropiedad, valorArea, numeroPisos, unidadesArea, tipoPropiedad);
+    public Bodega(String identificador, String direccion, Boolean disponible, Double precio, Empleado empleado, LocalDateTime fechaCreacion, DisposicionPropiedad disposicionPropiedad, Float valorArea, TipoArea unidadesArea, TipoBodegaLote tipo) {
+        super(identificador, direccion, disponible, precio, empleado, fechaCreacion, disposicionPropiedad, valorArea, unidadesArea);
         this.tipo = tipo;
     }
 
@@ -32,7 +32,7 @@ public class Bodega extends Propiedad {
             st.close();
 
             PreparedStatement st2 = con.prepareStatement("UPDATE propiedad SET" +
-                    "id_bodega = "+ this.getIdentificador() +", " +
+                    "id_bodega = "+ this.getIdentificador() +" " +
                     "WHERE id = '"+this.getIdentificador()+"'");
 
             st2.executeUpdate();

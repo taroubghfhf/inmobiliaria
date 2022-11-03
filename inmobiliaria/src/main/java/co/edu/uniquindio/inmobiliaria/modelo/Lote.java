@@ -13,8 +13,8 @@ import java.time.LocalDateTime;
 public class Lote extends Propiedad{
     private TipoBodegaLote tipo;
 
-    public Lote(String identificador, String direccion, Boolean disponible, Double precio, Empleado empleado, LocalDateTime fechaCreacion, DisposicionPropiedad disposicionPropiedad, Float valorArea, Integer numeroPisos, TipoArea unidadesArea, String tipoPropiedad, TipoBodegaLote tipo) {
-        super(identificador, direccion, disponible, precio, empleado, fechaCreacion, disposicionPropiedad, valorArea, numeroPisos, unidadesArea, tipoPropiedad);
+    public Lote(String identificador, String direccion, Boolean disponible, Double precio, Empleado empleado, LocalDateTime fechaCreacion, DisposicionPropiedad disposicionPropiedad, Float valorArea, TipoArea unidadesArea, TipoBodegaLote tipo) {
+        super(identificador, direccion, disponible, precio, empleado, fechaCreacion, disposicionPropiedad, valorArea, unidadesArea);
         this.tipo = tipo;
     }
 
@@ -31,7 +31,7 @@ public class Lote extends Propiedad{
             st.close();
 
             PreparedStatement st2 = con.prepareStatement("UPDATE propiedad SET" +
-                    "id_lote = "+ this.getIdentificador() +", " +
+                    "id_lote = "+ this.getIdentificador() +" " +
                     "WHERE id = '"+this.getIdentificador()+"'");
 
             st2.executeUpdate();
