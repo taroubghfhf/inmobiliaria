@@ -13,8 +13,8 @@ public class Bodega extends Propiedad{
 
     private TipoBodegaLote tipo;
 
-    public Bodega(String identificador, String direccion, Propietario propietario, Boolean disponible, Double precio, Empleado empleado, LocalDateTime fecha, DisposicionPropiedad disposicionPropiedad, Float valorArea, Integer numeroPisos, TipoArea area, String tipoPropiedad, TipoBodegaLote tipo) {
-        super(identificador, direccion, propietario, disponible, precio, empleado, fecha, disposicionPropiedad, valorArea, numeroPisos, area, tipoPropiedad);
+    public Bodega(String identificador, String direccion, Boolean disponible, Double precio, Empleado empleado, LocalDateTime fechaCreacion, DisposicionPropiedad disposicionPropiedad, Float valorArea, Integer numeroPisos, TipoArea unidadesArea, String tipoPropiedad, TipoBodegaLote tipo) {
+        super(identificador, direccion, disponible, precio, empleado, fechaCreacion, disposicionPropiedad, valorArea, numeroPisos, unidadesArea, tipoPropiedad);
         this.tipo = tipo;
     }
 
@@ -23,13 +23,19 @@ public class Bodega extends Propiedad{
             Conexion cx =  new Conexion();
             Connection con = cx.getConexion();
 
-            PreparedStatement st = con.prepareStatement("UPDATE propiedad SET" +
-                    "\"tipoBodegaLote\"= "+ this.getTipo() +", " +
-                    "\"tipoPropiedad\"= "+this.getTipoPropiedad()+", "+
-                    "WHERE id = '"+this.getIdentificador()+"'");
+            PreparedStatement st = con.prepareStatement("INSERT INTO bodega (id, tipo) VALUES(?,?)");
+            st.setString(1, this.getIdentificador());
+            st.setString(2, String.valueOf(this.tipo));
 
             st.executeUpdate();
             st.close();
+
+            PreparedStatement st2 = con.prepareStatement("UPDATE propiedad SET" +
+                    "id_bodega = "+ this.getIdentificador() +", " +
+                    "WHERE id = '"+this.getIdentificador()+"'");
+
+            st2.executeUpdate();
+            st2.close();
 
             con.close();
             return true;

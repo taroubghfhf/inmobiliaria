@@ -1,3 +1,67 @@
+create table apartamento
+(
+    id varchar(55) not null primary key unique,
+    balcon boolean,
+    piso integer,
+    valor_administracion decimal,
+    numero_parqueaderos integer
+);
+
+create table chalet
+(
+    id varchar(55) not null primary key unique,
+    agua_potable boolean,
+    alcantarillado boolean,
+    pozo_septico boolean,
+    internet boolean,
+    energia_electrica boolean,
+    gas_domiciliario boolean
+);
+
+create table casa
+(
+    id varchar(55) not null primary key unique
+);
+
+create table vivienda
+(
+    id varchar(55) not null primary key unique,
+    numero_habitaciones integer,
+    numero_banos integer,
+    material varchar(255),
+    id_apartamento varchar(55)
+        constraint vivienda_apartamento_id_fk
+            references apartamento,
+    id_chalet varchar(55)
+        constraint vivienda_chalet_id_fk
+            references chalet,
+    id_casa varchar(55)
+        constraint vivienda_casa_id_fk
+            references casa
+);
+
+create table edificio
+(
+    id varchar(55) not null primary key unique
+);
+
+create table parqueadero
+(
+    id varchar(55) not null primary key unique
+);
+
+create table lote
+(
+    id varchar(55) not null primary key unique,
+    tipo varchar(55)
+);
+
+create table bodega
+(
+    id varchar(55) not null primary key unique,
+    tipo varchar(55)
+);
+
 create table propiedad
 (
     id                     varchar(55)                not null
@@ -6,48 +70,34 @@ create table propiedad
     direccion              varchar(255)                not null,
     disponible             boolean     default TRUE,
     precio                 decimal     default 0       not null,
-    fecha                  timestamp,
-    "fechaCreacion" timestamp,
+    fecha_creacion timestamp,
     area                   decimal     default 0 not null,
-    "tipoArea"             varchar(10) default 'KM2'   not null,
-    "numeroPisos"          int,
-    "disposicionPropiedad" varchar(55) default 'VENTA',
-    "tipoPropiedad"     varchar(55),
-    "numeroHabitaciones"    int,
-    "numeroBanos"   int,
-    material    varchar(255),
-    balcon  boolean,
-    ascensor boolean,
-    "tipoBodegaLote" varchar(255),
-    piso int,
-    "numeroParqueaderos" int,
-    "valorAdministracion" decimal,
-    "aguaPotable" boolean,
-    "alcantarillado" boolean,
-    "pozoSeptico" boolean,
-    internet boolean,
-    "energiaElectrica" boolean,
-    "gasDomiciliario" boolean
+    unidades_area             varchar(10) default 'KM2'   not null,
+    disposicion_propiedad varchar(55) default 'VENTA',
+    id_vivienda varchar(55)
+        constraint propiedad_vivienda_id_fk
+            references vivienda,
+    id_edificio varchar(55)
+        constraint propiedad_edificio_id_fk
+            references edificio,
+    id_bodega varchar(55)
+        constraint propiedad_bodega_id_fk
+            references bodega,
+    id_lote varchar(55)
+        constraint propiedad_lote_id_fk
+            references lote,
+    id_parqueadero varchar(55)
+        constraint propiedad_parqueadero_fk
+            references parqueadero
 );
 
-create table empleado
+create table rol
 (
-    id      varchar(55)  not null
+    id        serial
         primary key
         unique,
-    nombre  varchar(255) not null,
-    celular varchar(55)  not null,
-    "idUsuario" integer not null
-        constraint "Empleado_Usuario_null_fk"
-            references usuario
-);
-create table propietario
-(
-    id      varchar(55)  not null
-        primary key
-        unique,
-    nombre  varchar(255) not null,
-    celular varchar(55)  not null
+    tipo_rol varchar(255) not null
+        unique
 );
 
 create table usuario
@@ -59,43 +109,30 @@ create table usuario
         unique,
     password varchar(255) not null,
     id_rol integer not null
-        constraint "Usuario_Rol_null_fk"
+        constraint usuario_rol_id_fk
             references rol
 );
-
-create table rol
+-- --------------------------------------------------------------
+create table empleado
 (
-    id        serial
+    id      varchar(55)  not null
         primary key
         unique,
-    "tipoRol" varchar(255) not null
-        unique
+    nombre  varchar(255) not null,
+    celular varchar(55)  not null,
+    id_usuario integer not null
+        constraint empleado_usuario_id_fk
+            references usuario
 );
 
-create table "PropiedadEmpleadoPropietario"
+create table propietario
 (
-    id              serial
+    id      varchar(55)  not null
         primary key
         unique,
-    "idPropiedad"   varchar(55) not null
-        constraint propiedadempleadopropietario_propiedad_id_fk
-            references propiedad,
-    "idEmpleado"    varchar(55) not null
-        constraint propiedadempleadopropietario_empleado_id_fk
-            references empleado,
-    "idPropietario" varchar(55)
-        constraint propiedadempleadopropietario_propietario_id_fk
-            references propietario,
-    "idCliente" varchar(55)
-        constraint "PropiedadEmpleadoPropietario_cliente_null_fk"
-            references cliente
+    nombre  varchar(255) not null,
+    celular varchar(55)  not null
 );
-
-insert into rol ("tipoRol")
-values ('Admin');
-
-insert into rol ("tipoRol")
-values ('Empleado');
 
 create table cliente
 (
@@ -105,4 +142,31 @@ create table cliente
     nombre  varchar(255) not null,
     celular varchar(55)  not null
 );
+-- --------------------------------------------------------------
 
+create table historial_propiedad
+(
+    id              serial
+        primary key
+        unique,
+    fecha_modificacion timestamp,
+    id_propiedad   varchar(55) not null
+        constraint historial_propiedad_propiedad_id_fk
+            references propiedad,
+    id_empleado    varchar(55) not null
+        constraint historial_propiedad_empleado_id_fk
+            references empleado,
+    id_propietario varchar(55)
+        constraint historial_propiedad_propietario_id_fk
+            references propietario,
+    id_cliente varchar(55)
+        constraint historial_propiedad_cliente_id_fk
+            references cliente
+);
+
+
+insert into rol (tipo_rol)
+values ('Admin');
+
+insert into rol (tipo_rol)
+values ('Empleado');

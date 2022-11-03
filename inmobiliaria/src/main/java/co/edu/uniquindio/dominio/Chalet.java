@@ -17,8 +17,8 @@ public class Chalet extends Vivienda{
     private Boolean energiaElectrica;
     private Boolean gasDomiciliario;
 
-    public Chalet(String identificador, String direccion, Propietario propietario, Boolean disponible, Double precio, Empleado empleado, LocalDateTime fecha, DisposicionPropiedad disposicionPropiedad, Float valorArea, Integer numeroPisos, TipoArea area, String tipoPropiedad, Integer numeroHabitaciones, Integer numeroBanos, String material, Boolean aguaPotable, Boolean alcantarillado, Boolean pozoSeptico, Boolean internet, Boolean energiaElectrica, Boolean gasDomiciliario) {
-        super(identificador, direccion, propietario, disponible, precio, empleado, fecha, disposicionPropiedad, valorArea, numeroPisos, area, tipoPropiedad, numeroHabitaciones, numeroBanos, material);
+    public Chalet(String identificador, String direccion, Boolean disponible, Double precio, Empleado empleado, LocalDateTime fechaCreacion, DisposicionPropiedad disposicionPropiedad, Float valorArea, Integer numeroPisos, TipoArea unidadesArea, String tipoPropiedad, Integer numeroHabitaciones, Integer numeroBanos, String material, Boolean aguaPotable, Boolean alcantarillado, Boolean pozoSeptico, Boolean internet, Boolean energiaElectrica, Boolean gasDomiciliario) {
+        super(identificador, direccion, disponible, precio, empleado, fechaCreacion, disposicionPropiedad, valorArea, numeroPisos, unidadesArea, tipoPropiedad, numeroHabitaciones, numeroBanos, material);
         this.aguaPotable = aguaPotable;
         this.alcantarillado = alcantarillado;
         this.pozoSeptico = pozoSeptico;
@@ -32,21 +32,33 @@ public class Chalet extends Vivienda{
             Conexion cx =  new Conexion();
             Connection con = cx.getConexion();
 
-            PreparedStatement st = con.prepareStatement("UPDATE propiedad SET" +
-                    "\"numeroHabitaciones\"= "+ this.getNumeroHabitaciones() +", " +
-                    "\"numeroBanos\"= "+ this.getNumeroBanos() +", " +
-                    "material= "+ this.getMaterial()+", " +
-                    "\"aguaPotable\"= "+this.getAguaPotable()+", " +
-                    "\"alcantarillado\"= "+this.getAlcantarillado()+", "+
-                    "\"pozoSeptico\"="+this.getPozoSeptico()+", "+
-                    "internet= "+this.getInternet()+", "+
-                    "\"energiaElectrica\"="+this.getEnergiaElectrica()+", "+
-                    "\"gasDomiciliario\"="+this.getGasDomiciliario()+" " +
-                    "\"tipoPropiedad\"= "+this.getTipoPropiedad()+", "+
-                    "WHERE id = '"+this.getIdentificador()+"'");
+            PreparedStatement st = con.prepareStatement("INSERT INTO chalet (id, agua_potable, alcantarillado, pozo_septico, internet, energia_electrica, gas_domiciliario) VALUES(?,?,?,?,?,?,?)");
+            st.setString(1, this.getIdentificador());
+            st.setBoolean(2, this.aguaPotable);
+            st.setBoolean(3, this.alcantarillado);
+            st.setBoolean(4, this.pozoSeptico);
+            st.setBoolean(5, this.internet);
+            st.setBoolean(6, this.energiaElectrica);
+            st.setBoolean(7, this.gasDomiciliario);
 
             st.executeUpdate();
             st.close();
+
+            PreparedStatement st2 = con.prepareStatement("INSERT INTO vivienda (id, numero_habitaciones, numero_banos, id_apartamento) VALUES(?,?,?,?)");
+            st2.setString(1, this.getIdentificador());
+            st.setInt(2, this.getNumeroHabitaciones());
+            st.setInt(3, this.getNumeroBanos());
+            st2.setString(4, this.getIdentificador());
+
+            st2.executeUpdate();
+            st2.close();
+
+            PreparedStatement st3 = con.prepareStatement("UPDATE propiedad SET" +
+                    "id_vivienda= "+ this.getIdentificador() +", " +
+                    "WHERE id = '"+this.getIdentificador()+"'");
+
+            st3.executeUpdate();
+            st3.close();
 
             con.close();
             return true;

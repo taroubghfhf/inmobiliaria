@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 @Getter
 public class Edificio extends Propiedad{
 
-    public Edificio(String identificador, String direccion, Propietario propietario, Boolean disponible, Double precio, Empleado empleado, LocalDateTime fecha, DisposicionPropiedad disposicionPropiedad, Float valorArea, Integer numeroPisos, TipoArea area, String tipoPropiedad) {
-        super(identificador, direccion, propietario, disponible, precio, empleado, fecha, disposicionPropiedad, valorArea, numeroPisos, area, tipoPropiedad);
+    public Edificio(String identificador, String direccion, Boolean disponible, Double precio, Empleado empleado, LocalDateTime fechaCreacion, DisposicionPropiedad disposicionPropiedad, Float valorArea, Integer numeroPisos, TipoArea unidadesArea, String tipoPropiedad) {
+        super(identificador, direccion, disponible, precio, empleado, fechaCreacion, disposicionPropiedad, valorArea, numeroPisos, unidadesArea, tipoPropiedad);
     }
 
     public boolean registrarEdificio() {
@@ -20,13 +20,18 @@ public class Edificio extends Propiedad{
             Conexion cx =  new Conexion();
             Connection con = cx.getConexion();
 
-            PreparedStatement st = con.prepareStatement("UPDATE propiedad SET" +
-                    "\"numeroPisos\"= "+ this.getNumeroPisos() +", " +
-                    "\"tipoPropiedad\"= "+this.getTipoPropiedad()+", "+
-                    "WHERE id = '"+this.getIdentificador()+"'");
+            PreparedStatement st = con.prepareStatement("INSERT INTO edificio (id) VALUES(?)");
+            st.setString(1, this.getIdentificador());
 
             st.executeUpdate();
             st.close();
+
+            PreparedStatement st2 = con.prepareStatement("UPDATE propiedad SET" +
+                    "id_edificio = "+ this.getIdentificador() +", " +
+                    "WHERE id = '"+this.getIdentificador()+"'");
+
+            st2.executeUpdate();
+            st2.close();
 
             con.close();
             return true;
