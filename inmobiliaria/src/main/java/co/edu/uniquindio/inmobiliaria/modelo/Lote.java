@@ -1,6 +1,6 @@
 package co.edu.uniquindio.inmobiliaria.modelo;
 
-import co.edu.uniquindio.inmobiliaria.utilidad.ConexionBaseDato;
+import co.edu.uniquindio.inmobiliaria.utilidad.Conexion;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,22 +13,29 @@ import java.time.LocalDateTime;
 public class Lote extends Propiedad{
     private TipoBodegaLote tipo;
 
-    public Lote(String identificador, String direccion, Propietario propietario, Boolean disponible, Double precio, Empleado empleado, LocalDateTime fecha, DisposicionPropiedad disposicionPropiedad, Float valorArea, Integer numeroPisos, TipoArea area, String tipoPropiedad, TipoBodegaLote tipo) {
-        super(identificador, direccion, propietario, disponible, precio, empleado, fecha, disposicionPropiedad, valorArea, numeroPisos, area, tipoPropiedad);
+    public Lote(String identificador, String direccion, Boolean disponible, Double precio, Empleado empleado, LocalDateTime fechaCreacion, DisposicionPropiedad disposicionPropiedad, Float valorArea, Integer numeroPisos, TipoArea unidadesArea, String tipoPropiedad, TipoBodegaLote tipo) {
+        super(identificador, direccion, disponible, precio, empleado, fechaCreacion, disposicionPropiedad, valorArea, numeroPisos, unidadesArea, tipoPropiedad);
         this.tipo = tipo;
     }
 
-    public boolean registrarBodega() {
+    public boolean registrarLote() {
         try{
-            Connection con = ConexionBaseDato.getInstance().getConnection();
+            Conexion cx =  new Conexion();
+            Connection con = cx.getConexion();
 
-            PreparedStatement st = con.prepareStatement("UPDATE propiedad SET" +
-                    "\"tipoBodegaLote\"= "+ this.getTipo() +", " +
-                    "\"tipoPropiedad\"= "+this.getTipoPropiedad()+", "+
-                    "WHERE id = '"+this.getIdentificador()+"'");
+            PreparedStatement st = con.prepareStatement("INSERT INTO lote (id, tipo) VALUES(?,?)");
+            st.setString(1, this.getIdentificador());
+            st.setString(2, String.valueOf(this.tipo));
 
             st.executeUpdate();
             st.close();
+
+            PreparedStatement st2 = con.prepareStatement("UPDATE propiedad SET" +
+                    "id_lote = "+ this.getIdentificador() +", " +
+                    "WHERE id = '"+this.getIdentificador()+"'");
+
+            st2.executeUpdate();
+            st2.close();
 
             con.close();
             return true;
