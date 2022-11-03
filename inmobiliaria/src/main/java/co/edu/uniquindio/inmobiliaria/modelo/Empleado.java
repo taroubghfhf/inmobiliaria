@@ -21,4 +21,8 @@ public class Empleado extends Persona {
         this.clientes = clientes;
         this.usuario = usuario;
     }
+
+    public Empleado(String nombre, String documeto, String celular) {
+        super(nombre, documeto, celular);
+    }
 }

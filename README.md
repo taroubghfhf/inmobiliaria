@@ -20,10 +20,6 @@ docker pull postgres
 ```
 docker run --name inm-container -e POSTGRES_PASSWORD=password -e POSTGRES_USER=postgres -e POSTGRES_DB=inmobiliaria -d -p 5432:5432 postgres
 ```
-- Crear la base de datos del proyecto
-```
-docker exec -it inm-container psql -U postgres -d inmobiliaria
-```
 - Copiar el script sql al contenedor
 ```
 docker cp .\inmobiliaria\inmobiliaria\src\main\java\co\edu\uniquindio\inmobiliaria\utilidad\db.sql inm-container:/docker-entrypoint-initdb.d/

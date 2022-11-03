@@ -12,8 +12,8 @@ import java.time.LocalDateTime;
 @Getter
 public class Edificio extends Propiedad{
 
-    public Edificio(String identificador, String direccion, Boolean disponible, Double precio, Empleado empleado, LocalDateTime fechaCreacion, DisposicionPropiedad disposicionPropiedad, Float valorArea, Integer numeroPisos, TipoArea unidadesArea, String tipoPropiedad) {
-        super(identificador, direccion, disponible, precio, empleado, fechaCreacion, disposicionPropiedad, valorArea, numeroPisos, unidadesArea, tipoPropiedad);
+    public Edificio(String identificador, String direccion, Boolean disponible, Double precio, Empleado empleado, LocalDateTime fechaCreacion, DisposicionPropiedad disposicionPropiedad, Float valorArea, TipoArea unidadesArea) {
+        super(identificador, direccion, disponible, precio, empleado, fechaCreacion, disposicionPropiedad, valorArea, unidadesArea);
     }
 
     public boolean registrarEdificio() {
@@ -28,7 +28,7 @@ public class Edificio extends Propiedad{
             st.close();
 
             PreparedStatement st2 = con.prepareStatement("UPDATE propiedad SET" +
-                    "id_edificio = "+ this.getIdentificador() +", " +
+                    "id_edificio = "+ this.getIdentificador() +" " +
                     "WHERE id = '"+this.getIdentificador()+"'");
 
             st2.executeUpdate();

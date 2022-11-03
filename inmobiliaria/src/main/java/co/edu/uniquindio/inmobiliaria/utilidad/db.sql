@@ -170,3 +170,15 @@ values ('Admin');
 
 insert into rol (tipo_rol)
 values ('Empleado');
+
+insert into usuario (email, password, id_rol)
+VALUES ('correo@example.com', 'password', 2);
+
+insert into empleado (id, nombre, celular, id_usuario)
+VALUES ('1', 'empleado1', '300', 1);
+
+insert into cliente (id, nombre, celular)
+VALUES ('1', 'cliente1', '300');
+
+insert into propietario (id, nombre, celular)
+VALUES ('1', 'propietario1', '300');

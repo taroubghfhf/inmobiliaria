@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class Casa extends Vivienda{
-    public Casa(String identificador, String direccion, Boolean disponible, Double precio, Empleado empleado, LocalDateTime fechaCreacion, DisposicionPropiedad disposicionPropiedad, Float valorArea, Integer numeroPisos, TipoArea unidadesArea, String tipoPropiedad, Integer numeroHabitaciones, Integer numeroBanos, String material) {
-        super(identificador, direccion, disponible, precio, empleado, fechaCreacion, disposicionPropiedad, valorArea, numeroPisos, unidadesArea, tipoPropiedad, numeroHabitaciones, numeroBanos, material);
+    public Casa(String identificador, String direccion, Boolean disponible, Double precio, Empleado empleado, LocalDateTime fechaCreacion, DisposicionPropiedad disposicionPropiedad, Float valorArea, TipoArea unidadesArea, Integer numeroHabitaciones, Integer numeroBanos, String material) {
+        super(identificador, direccion, disponible, precio, empleado, fechaCreacion, disposicionPropiedad, valorArea, unidadesArea, numeroHabitaciones, numeroBanos, material);
     }
 
     public boolean registrarCasa() {
@@ -36,7 +36,7 @@ public class Casa extends Vivienda{
             st2.close();
 
             PreparedStatement st3 = con.prepareStatement("UPDATE propiedad SET" +
-                    "id_vivienda = "+ this.getIdentificador() +", " +
+                    "id_vivienda = "+ this.getIdentificador() +" " +
                     "WHERE id = '"+this.getIdentificador()+"'");
 
             st3.executeUpdate();
