@@ -1,6 +1,6 @@
 package co.edu.uniquindio.inmobiliaria.modelo;
 
-import co.edu.uniquindio.inmobiliaria.utilidad.ConexionBaseDato;
+import co.edu.uniquindio.inmobiliaria.utilidad.Conexion;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,19 +16,18 @@ public class Propiedad {
     private Boolean disponible;
     private Double precio;
     private Empleado empleado;
-    private LocalDateTime fecha;
+    private LocalDateTime fechaModificacion;
     private LocalDateTime fechaCreacion;
     private DisposicionPropiedad disposicionPropiedad;
     private Float valorArea;
     private Integer numeroPisos;
-    private TipoArea area;
+    private TipoArea unidadesArea;
     private String tipoPropiedad = this.getClass().getSimpleName();
     private Cliente cliente;
 
-    public Propiedad(String identificador, String direccion, Propietario propietario, Boolean disponible, Double precio, Empleado empleado, LocalDateTime fechaCreacion, DisposicionPropiedad disposicionPropiedad, Float valorArea, Integer numeroPisos, TipoArea area, String tipoPropiedad) {
+    public Propiedad(String identificador, String direccion, Boolean disponible, Double precio, Empleado empleado, LocalDateTime fechaCreacion, DisposicionPropiedad disposicionPropiedad, Float valorArea, Integer numeroPisos, TipoArea unidadesArea, String tipoPropiedad) {
         this.identificador = identificador;
         this.direccion = direccion;
-        this.propietario = propietario;
         this.disponible = disponible;
         this.precio = precio;
         this.empleado = empleado;
@@ -36,28 +35,28 @@ public class Propiedad {
         this.disposicionPropiedad = disposicionPropiedad;
         this.valorArea = valorArea;
         this.numeroPisos = numeroPisos;
-        this.area = area;
+        this.unidadesArea = unidadesArea;
         this.tipoPropiedad = tipoPropiedad;
     }
 
-
     public boolean registrarPropiedad(){
         try{
-            Connection con = ConexionBaseDato.getInstance().getConnection();
+            Conexion cx =  new Conexion();
+            Connection con = cx.getConexion();
 
-            PreparedStatement st = con.prepareStatement("INSERT INTO propiedad (id, direccion, disponible, precio, \"fechaCreacion\", area, \"tipoArea\", \"disposicionPropiedad\") VALUES(?,?,?,?,?,?,?,?)");
+            PreparedStatement st = con.prepareStatement("INSERT INTO propiedad (id, direccion, disponible, precio, fecha_creacion, area, unidades_area, disposicion_propiedad) VALUES(?,?,?,?,?,?,?,?)");
             st.setString(1, this.identificador);
             st.setString(2, this.direccion);
             st.setBoolean(3, this.disponible);
             st.setDouble(4, this.precio);
             st.setTimestamp(5, Timestamp.valueOf(this.fechaCreacion));
             st.setFloat(6, this.valorArea);
-            st.setString(7, String.valueOf(this.area));
+            st.setString(7, String.valueOf(this.unidadesArea));
             st.setString(8, String.valueOf(this.disposicionPropiedad));
             st.executeUpdate();
             st.close();
 
-            PreparedStatement st2 = con.prepareStatement("INSERT INTO \"PropiedadEmpleadoPropietario\" (\"idPropiedad\", \"idEmpleado\") VALUES(?,?)");
+            PreparedStatement st2 = con.prepareStatement("INSERT INTO historial_propiedad (id_propiedad, id_empleado) VALUES(?,?)");
             st2.setString(1, this.identificador);
             st2.setString(2, this.empleado.toString());
             st2.executeUpdate();
@@ -74,20 +73,21 @@ public class Propiedad {
     public boolean alquilarPropiedad(String id) {
         try{
             if(consultarPropiedad(id) > 0) {
-                Connection con = ConexionBaseDato.getInstance().getConnection();
+                Conexion cx =  new Conexion();
+                Connection con = cx.getConexion();
 
                 PreparedStatement st = con.prepareStatement("UPDATE propiedad SET" +
-                        "\"disposicionPropiedad\"= "+ this.disposicionPropiedad +", " +
+                        "disposicion_propiedad= "+ this.disposicionPropiedad +", " +
                         "precio= "+ this.getPrecio() +", " +
-                        "fecha="+this.getFecha()+" " +
                         "WHERE id = '"+id+"'");
 
                 st.executeUpdate();
                 st.close();
 
-                PreparedStatement st2 = con.prepareStatement("UPDATE \"PropiedadEmpleadoPropietario\" SET" +
-                        "\"idCliente\"= "+ this.cliente.getDocumeto() +" " +
-                        "WHERE \"idPropiedad\" = '"+id+"'");
+                PreparedStatement st2 = con.prepareStatement("UPDATE historial_propiedad SET" +
+                        "id_cliente= "+ this.cliente.getDocumeto() +" " +
+                        "fecha_modificacion="+this.getFechaModificacion()+" " +
+                        "WHERE id_propiedad = '"+id+"'");
 
                 st2.executeUpdate();
                 st2.close();
@@ -104,30 +104,54 @@ public class Propiedad {
 
     public boolean venderPropiedad(String id) {
         try{
-            if(consultarPropiedad(id) > 0) {
-                if(consultarDisponibilidadPropiedad(id)) {
-                    Connection con = ConexionBaseDato.getInstance().getConnection();
+            if(consultarPropiedad(id) > 0 && consultarDisponibilidadPropiedad(id)) {
+                Conexion cx =  new Conexion();
+                Connection con = cx.getConexion();
 
-                    PreparedStatement st = con.prepareStatement("UPDATE propiedad SET" +
-                                    "\"disposicionPropiedad\"= "+ this.disposicionPropiedad +", " +
-                                    "precio= "+ this.getPrecio() +", " +
-                                    "fecha="+this.getFecha()+", " +
-                                    "disponible= 'FALSE'" +
-                            "WHERE id = '"+id+"'");
+                PreparedStatement st = con.prepareStatement("UPDATE propiedad SET" +
+                                "disposicion_propiedad= "+ this.disposicionPropiedad +", " +
+                                "precio= "+ this.getPrecio() +", " +
+                                "disponible= 'FALSE'" +
+                        "WHERE id = '"+id+"'");
 
-                    st.executeUpdate();
-                    st.close();
+                st.executeUpdate();
+                st.close();
 
-                    PreparedStatement st2 = con.prepareStatement("UPDATE \"PropiedadEmpleadoPropietario\" SET" +
-                            "\"idCliente\"= "+ this.cliente.getDocumeto() +" " +
-                            "WHERE \"idPropiedad\" = '"+id+"'");
+                PreparedStatement st2 = con.prepareStatement("UPDATE historial_propiedad SET" +
+                        "id_propietario= "+ this.propietario.getDocumeto() +" " +
+                        "id_cliente= "+ this.cliente.getDocumeto() +" " +
+                        "fecha_modificacion="+this.getFechaModificacion()+" " +
+                        "WHERE id_propiedad = '"+id+"'");
 
-                    st2.executeUpdate();
-                    st2.close();
+                st2.executeUpdate();
+                st2.close();
 
-                    con.close();
-                    return true;
-                }
+                con.close();
+                return true;
+            }
+            return false;
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean retirarPropiedad(String id) {
+        try{
+            if(!consultarDisponibilidadPropiedad(id)) {
+                Conexion cx =  new Conexion();
+                Connection con = cx.getConexion();
+
+                PreparedStatement st = con.prepareStatement("UPDATE propiedad SET" +
+                        "disposicion_propiedad= "+ this.disposicionPropiedad +", " +
+                        "disponible= 'FALSE'" +
+                        "WHERE id = '"+id+"'");
+
+                st.executeUpdate();
+                st.close();
+
+                con.close();
+                return true;
             }
             return false;
         }catch(Exception e){
@@ -138,10 +162,11 @@ public class Propiedad {
 
     public boolean consultarDisponibilidadPropiedad(String id) {
         try{
-            Connection con = ConexionBaseDato.getInstance().getConnection();
+            Conexion cx =  new Conexion();
+            Connection con = cx.getConexion();
 
             Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery("SELECT disponible FROM propiedad WHERE id = '\"+id+\"'");
+            ResultSet rs = st.executeQuery("SELECT disponible FROM propiedad WHERE id = '"+id+"'");
             while (rs.next()) {
                 return rs.getBoolean(1);
             }
@@ -158,11 +183,12 @@ public class Propiedad {
 
     public int consultarPropiedad(String id) {
         try{
-            Connection con = ConexionBaseDato.getInstance().getConnection();
+            Conexion cx =  new Conexion();
+            Connection con = cx.getConexion();
             int count = 0;
 
             Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery("SELECT count(*) FROM propiedad WHERE id = '\"+id+\"'");
+            ResultSet rs = st.executeQuery("SELECT count(*) FROM propiedad WHERE id = '"+id+"'");
             while (rs.next()) {
                 count = rs.getInt(1);
             }
