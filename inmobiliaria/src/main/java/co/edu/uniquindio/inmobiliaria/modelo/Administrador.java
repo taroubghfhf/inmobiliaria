@@ -16,5 +16,5 @@ public class Administrador extends Persona{
         super(nombre, documento, celular);
         this.usuario = usuario;
         this.usuario.registrarUsuario(1);
-    }
+    } 
 }

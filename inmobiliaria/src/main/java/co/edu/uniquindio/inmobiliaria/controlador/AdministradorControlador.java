@@ -1,11 +1,11 @@
-//package co.edu.uniquindio.inmobiliaria.controlador;
-//
-//import co.edu.uniquindio.inmobiliaria.modelo.Empleado;
-//
-//import java.util.Optional;
-//
-//public class AdministradorControlador {
-//
+package co.edu.uniquindio.inmobiliaria.controlador;
+
+import co.edu.uniquindio.inmobiliaria.modelo.Empleado;
+
+import java.util.Optional;
+
+public class AdministradorControlador {
+
 //    public boolean agregarEmpleado(Empleado empleado) {
 //        if (buscarEmpleado(empleado).isPresent()) {
 //            throw new RuntimeException("El empleado ya existe");
@@ -52,4 +52,4 @@
 //        return Datos.getIntancia().empleados.stream()
 //                .filter((empl) -> empl.getDocumento().equals(empleado.getDocumento())).findFirst();
 //    }
-//}
+}
