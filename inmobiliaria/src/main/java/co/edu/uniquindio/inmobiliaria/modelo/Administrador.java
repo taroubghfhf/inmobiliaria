@@ -10,12 +10,11 @@ import java.util.List;
 public class Administrador extends Persona{
 
     private List<Empleado> empleados;
-    private Usuario usuaro;
+    private Usuario usuario;
 
-    public Administrador(String nombre, String documeto, String celular,
-                         List<Empleado> empleados, Usuario usuaro) {
-        super(nombre, documeto, celular);
-        this.empleados = empleados;
-        this.usuaro = usuaro;
+    public Administrador(String nombre, Integer documento, String celular, Usuario usuario) {
+        super(nombre, documento, celular);
+        this.usuario = usuario;
+        this.usuario.registrarUsuario(1);
     }
 }

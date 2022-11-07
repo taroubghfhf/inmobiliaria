@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Getter
@@ -18,7 +19,7 @@ public class Chalet extends Vivienda{
     private Boolean energiaElectrica;
     private Boolean gasDomiciliario;
 
-    public Chalet(String identificador, String direccion, Boolean disponible, Double precio, Empleado empleado, LocalDateTime fechaCreacion, DisposicionPropiedad disposicionPropiedad, Float valorArea, TipoArea unidadesArea, Integer numeroHabitaciones, Integer numeroBanos, String material, Boolean aguaPotable, Boolean alcantarillado, Boolean pozoSeptico, Boolean internet, Boolean energiaElectrica, Boolean gasDomiciliario) {
+    public Chalet(String identificador, String direccion, Boolean disponible, Double precio, Empleado empleado, LocalDateTime fechaCreacion, DisposicionPropiedad disposicionPropiedad, Float valorArea, TipoArea unidadesArea, Integer numeroPisos, Integer numeroHabitaciones, Integer numeroBanos, String material, Boolean aguaPotable, Boolean alcantarillado, Boolean pozoSeptico, Boolean internet, Boolean energiaElectrica, Boolean gasDomiciliario) {
         super(identificador, direccion, disponible, precio, empleado, fechaCreacion, disposicionPropiedad, valorArea, unidadesArea, numeroHabitaciones, numeroBanos, material);
         this.aguaPotable = aguaPotable;
         this.alcantarillado = alcantarillado;
@@ -26,6 +27,7 @@ public class Chalet extends Vivienda{
         this.internet = internet;
         this.energiaElectrica = energiaElectrica;
         this.gasDomiciliario = gasDomiciliario;
+        this.setNumeroPisos(numeroPisos);
     }
 
     public boolean registrarChalet() {
@@ -45,7 +47,7 @@ public class Chalet extends Vivienda{
             st.executeUpdate();
             st.close();
 
-            PreparedStatement st2 = con.prepareStatement("INSERT INTO vivienda (id, numero_habitaciones, numero_banos, id_apartamento) VALUES(?,?,?,?)");
+            PreparedStatement st2 = con.prepareStatement("INSERT INTO vivienda (id, numero_habitaciones, numero_banos, id_chalet) VALUES(?,?,?,?)");
             st2.setString(1, this.getIdentificador());
             st.setInt(2, this.getNumeroHabitaciones());
             st.setInt(3, this.getNumeroBanos());
@@ -54,12 +56,24 @@ public class Chalet extends Vivienda{
             st2.executeUpdate();
             st2.close();
 
-            PreparedStatement st3 = con.prepareStatement("UPDATE propiedad SET" +
-                    "id_vivienda= "+ this.getIdentificador() +" " +
-                    "WHERE id = '"+this.getIdentificador()+"'");
-
+            PreparedStatement st3 = con.prepareStatement("INSERT INTO propiedad (id, direccion, disponible, precio, fecha_creacion, area, unidades_area, disposicion_propiedad, id_vivienda) VALUES(?,?,?,?,?,?,?,?,?)");
+            st3.setString(1, this.getIdentificador());
+            st3.setString(2, this.getDireccion());
+            st3.setBoolean(3, this.getDisponible());
+            st3.setDouble(4, this.getPrecio());
+            st3.setTimestamp(5, Timestamp.valueOf(this.getFechaCreacion()));
+            st3.setFloat(6, this.getValorArea());
+            st3.setString(7, String.valueOf(this.getUnidadesArea()));
+            st3.setString(8, String.valueOf(this.getDisposicionPropiedad()));
+            st3.setString(9, this.getIdentificador());
             st3.executeUpdate();
             st3.close();
+
+            PreparedStatement st4 = con.prepareStatement("INSERT INTO historial_propiedad (id_propiedad, id_empleado) VALUES(?,?)");
+            st4.setString(1, this.getIdentificador());
+            st4.setInt(2, this.getEmpleado().getDocumento());
+            st4.executeUpdate();
+            st4.close();
 
             con.close();
             return true;

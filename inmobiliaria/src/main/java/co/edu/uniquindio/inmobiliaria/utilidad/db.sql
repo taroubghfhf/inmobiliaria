@@ -64,15 +64,13 @@ create table bodega
 
 create table propiedad
 (
-    id                     varchar(55)                not null
-        primary key
-        unique,
-    direccion              varchar(255)                not null,
-    disponible             boolean     default TRUE,
-    precio                 decimal     default 0       not null,
+    id serial not null primary key unique,
+    direccion varchar(255) not null,
+    disponible boolean default TRUE,
+    precio decimal default 0 not null,
     fecha_creacion timestamp,
-    area                   decimal     default 0 not null,
-    unidades_area             varchar(10) default 'KM2'   not null,
+    area decimal default 0 not null,
+    unidades_area varchar(10) default 'KM2'   not null,
     disposicion_propiedad varchar(55) default 'VENTA',
     id_vivienda varchar(55)
         constraint propiedad_vivienda_id_fk
@@ -93,21 +91,16 @@ create table propiedad
 
 create table rol
 (
-    id        serial
-        primary key
-        unique,
-    tipo_rol varchar(255) not null
-        unique
+    id serial primary key unique,
+    tipo_rol varchar(255) not null unique
 );
 
 create table usuario
 (
-    id       serial
-        primary key
-        unique,
-    email    varchar(255) not null
-        unique,
+    id serial primary key unique,
+    email varchar(255) not null unique,
     password varchar(255) not null,
+    estado boolean default TRUE,
     id_rol integer not null
         constraint usuario_rol_id_fk
             references rol
@@ -115,9 +108,7 @@ create table usuario
 -- --------------------------------------------------------------
 create table empleado
 (
-    id      varchar(55)  not null
-        primary key
-        unique,
+    id integer not null primary key unique,
     nombre  varchar(255) not null,
     celular varchar(55)  not null,
     id_usuario integer not null
@@ -127,18 +118,14 @@ create table empleado
 
 create table propietario
 (
-    id      varchar(55)  not null
-        primary key
-        unique,
+    id integer not null primary key unique,
     nombre  varchar(255) not null,
     celular varchar(55)  not null
 );
 
 create table cliente
 (
-    id      varchar(55)  not null
-        primary key
-        unique,
+    id integer not null primary key unique,
     nombre  varchar(255) not null,
     celular varchar(55)  not null
 );
@@ -146,20 +133,18 @@ create table cliente
 
 create table historial_propiedad
 (
-    id              serial
-        primary key
-        unique,
+    id serial primary key unique,
     fecha_modificacion timestamp,
-    id_propiedad   varchar(55) not null
+    id_propiedad integer not null
         constraint historial_propiedad_propiedad_id_fk
             references propiedad,
-    id_empleado    varchar(55) not null
+    id_empleado integer not null
         constraint historial_propiedad_empleado_id_fk
             references empleado,
-    id_propietario varchar(55)
+    id_propietario integer
         constraint historial_propiedad_propietario_id_fk
             references propietario,
-    id_cliente varchar(55)
+    id_cliente integer
         constraint historial_propiedad_cliente_id_fk
             references cliente
 );
@@ -172,13 +157,4 @@ insert into rol (tipo_rol)
 values ('Empleado');
 
 insert into usuario (email, password, id_rol)
-VALUES ('correo@example.com', 'password', 2);
-
-insert into empleado (id, nombre, celular, id_usuario)
-VALUES ('1', 'empleado1', '300', 1);
-
-insert into cliente (id, nombre, celular)
-VALUES ('1', 'cliente1', '300');
-
-insert into propietario (id, nombre, celular)
-VALUES ('1', 'propietario1', '300');
+VALUES ('admin@inmo.com', 'password_admin', 1);
