@@ -1,20 +1,20 @@
-//package co.edu.uniquindio.inmobiliaria.controlador;
-//
-//import co.edu.uniquindio.inmobiliaria.modelo.Administrador;
-//import co.edu.uniquindio.inmobiliaria.modelo.Empleado;
-//import co.edu.uniquindio.inmobiliaria.modelo.Usuario;
-//import lombok.Getter;
-//
-//import java.util.ArrayList;
-//import java.util.List;
-//
-//@Getter
-//public class Datos {
-//
-//    public List<Usuario> usuarios;
-//    public List<Empleado> empleados;
-//    public Administrador administrador;
-//
+package co.edu.uniquindio.inmobiliaria.controlador;
+
+import co.edu.uniquindio.inmobiliaria.modelo.Administrador;
+import co.edu.uniquindio.inmobiliaria.modelo.Empleado;
+import co.edu.uniquindio.inmobiliaria.modelo.Usuario;
+import lombok.Getter;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Getter
+public class Datos {
+
+    public List<Usuario> usuarios;
+    public List<Empleado> empleados;
+    public Administrador administrador;
+
 //    private static Datos intancia;
 //
 //
@@ -50,4 +50,4 @@
 //        return intancia;
 //    }
 //
-//}
+}

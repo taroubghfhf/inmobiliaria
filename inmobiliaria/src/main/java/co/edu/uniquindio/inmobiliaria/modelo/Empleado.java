@@ -20,7 +20,7 @@ public class Empleado extends Persona {
     public Empleado(String nombre, Integer documento, String celular, Usuario usuario) {
         super(nombre, documento, celular);
         this.usuario = usuario;
-    }
+    } 
 
     public void registrarEmpleado(){
         try{
