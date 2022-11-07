@@ -165,15 +165,14 @@ public class Propiedad {
         }
     }
 
-    public int consultarIdPropiedad(String fk) {
+    public int consultarIdPropiedad(String fk, String fk_id) {
         try{
             Conexion cx =  new Conexion();
             Connection con = cx.getConexion();
             int count = 0;
 
             Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery("SELECT id FROM propiedad WHERE "+fk+" = 2 ORDER BY id DESC LIMIT 1");
-            ResultSet rs = st.executeQuery("SELECT count(*) FROM propiedad WHERE id = '"+id+"'");
+            ResultSet rs = st.executeQuery("SELECT id FROM propiedad WHERE "+fk+" = '"+fk_id+"'");
             while (rs.next()) {
                 count = rs.getInt(1);
             }

@@ -64,7 +64,7 @@ create table bodega
 
 create table propiedad
 (
-    id serial not null primary key unique,
+    id serial primary key unique,
     direccion varchar(255) not null,
     disponible boolean default TRUE,
     precio decimal default 0 not null,
