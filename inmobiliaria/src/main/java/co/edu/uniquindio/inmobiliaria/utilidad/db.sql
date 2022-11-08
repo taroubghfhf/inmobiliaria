@@ -101,6 +101,7 @@ create table usuario
     email varchar(255) not null unique,
     password varchar(255) not null,
     estado boolean default TRUE,
+    frase varchar(255) not null,
     id_rol integer not null
         constraint usuario_rol_id_fk
             references rol
@@ -156,5 +157,5 @@ values ('Admin');
 insert into rol (tipo_rol)
 values ('Empleado');
 
-insert into usuario (email, password, id_rol)
-VALUES ('admin@inmo.com', 'password_admin', 1);
+insert into usuario (email, password, id_rol, frase)
+VALUES ('admin@inmo.com', 'password_admin', 1, 'frase_seguridad');

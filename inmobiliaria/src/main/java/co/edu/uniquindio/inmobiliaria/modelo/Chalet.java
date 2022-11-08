@@ -49,8 +49,8 @@ public class Chalet extends Vivienda{
 
             PreparedStatement st2 = con.prepareStatement("INSERT INTO vivienda (id, numero_habitaciones, numero_banos, id_chalet) VALUES(?,?,?,?)");
             st2.setString(1, this.getIdentificador());
-            st.setInt(2, this.getNumeroHabitaciones());
-            st.setInt(3, this.getNumeroBanos());
+            st2.setInt(2, this.getNumeroHabitaciones());
+            st2.setInt(3, this.getNumeroBanos());
             st2.setString(4, this.getIdentificador());
 
             st2.executeUpdate();

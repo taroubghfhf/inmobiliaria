@@ -31,7 +31,6 @@ public class Apartamento extends Vivienda {
         try{
             Conexion cx =  new Conexion();
             Connection con = cx.getConexion();
-            System.out.println(this.getIdentificador());
 
             PreparedStatement st = con.prepareStatement("INSERT INTO apartamento (id, balcon, piso, valor_administracion, numero_parqueaderos) VALUES(?,?,?,?,?)");
             st.setString(1, this.getIdentificador());
