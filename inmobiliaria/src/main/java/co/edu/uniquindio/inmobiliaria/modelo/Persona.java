@@ -11,14 +11,17 @@ public class Persona {
 
     private final static String DOCUMENTO_INVALIDO="Debe ingresar su numero de documento";
     private String nombre;
-    private String documeto;
+    private Integer documento;
     private String celular;
 
-    public Persona(String nombre, String documeto, String celular) {
+    public Persona(String nombre, Integer documento, String celular) {
         validacionObligatoriedad(nombre,NOMBRE_INVALIDO );
-        validacionObligatoriedad(documeto,DOCUMENTO_INVALIDO);
+        validacionObligatoriedad(documento,DOCUMENTO_INVALIDO);
         this.nombre = nombre;
-        this.documeto = documeto;
+        this.documento = documento;
         this.celular = celular;
+    }
+
+    public Persona() {
     }
 }
