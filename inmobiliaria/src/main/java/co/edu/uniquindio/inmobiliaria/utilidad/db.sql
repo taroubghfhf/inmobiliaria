@@ -1,10 +1,47 @@
+create table propiedad
+(
+    id serial not null primary key unique,
+    direccion varchar(255) not null,
+    disponible boolean default TRUE,
+    precio decimal default 0 not null,
+    fecha_creacion timestamp,
+    area decimal default 0 not null,
+    unidades_area varchar(10) default 'KM2'   not null,
+    disposicion_propiedad varchar(55) default 'VENTA',
+    tipo_propiedad varchar(55) not null
+);
+
+create table vivienda
+(
+    id serial not null primary key unique,
+    numero_habitaciones integer,
+    numero_banos integer,
+    material varchar(255),
+    id_propiedad integer not null
+        constraint vivenda_propiedad_id_fk
+            references propiedad
+);
+
 create table apartamento
 (
     id varchar(55) not null primary key unique,
     balcon boolean,
+    ascensor boolean,
     piso integer,
     valor_administracion decimal,
-    numero_parqueaderos integer
+    numero_parqueaderos integer,
+    id_vivienda integer not null
+        constraint apartamento_vivenda_id_fk
+            references vivienda
+);
+
+create table casa
+(
+    id varchar(55) not null primary key unique,
+    numero_pisos integer,
+    id_vivienda integer not null
+        constraint casa_vivenda_id_fk
+            references vivienda
 );
 
 create table chalet
@@ -15,78 +52,45 @@ create table chalet
     pozo_septico boolean,
     internet boolean,
     energia_electrica boolean,
-    gas_domiciliario boolean
-);
-
-create table casa
-(
-    id varchar(55) not null primary key unique
-);
-
-create table vivienda
-(
-    id varchar(55) not null primary key unique,
-    numero_habitaciones integer,
-    numero_banos integer,
-    material varchar(255),
-    id_apartamento varchar(55)
-        constraint vivienda_apartamento_id_fk
-            references apartamento,
-    id_chalet varchar(55)
-        constraint vivienda_chalet_id_fk
-            references chalet,
-    id_casa varchar(55)
-        constraint vivienda_casa_id_fk
+    gas_domiciliario boolean,
+    id_casa varchar(55) not null
+        constraint chalet_casa_id_fk
             references casa
 );
 
 create table edificio
 (
-    id varchar(55) not null primary key unique
+    id varchar(55) not null primary key unique,
+    numero_pisos integer,
+    id_propiedad integer not null
+        constraint edificio_propiedad_id_fk
+            references propiedad
 );
 
 create table parqueadero
 (
-    id varchar(55) not null primary key unique
+    id varchar(55) not null primary key unique,
+    id_propiedad integer not null
+        constraint parqueadero_propiedad_id_fk
+            references propiedad
 );
 
 create table lote
 (
     id varchar(55) not null primary key unique,
-    tipo varchar(55)
+    tipo varchar(55),
+    id_propiedad integer not null
+        constraint lote_propiedad_id_fk
+            references propiedad
 );
 
 create table bodega
 (
     id varchar(55) not null primary key unique,
-    tipo varchar(55)
-);
-
-create table propiedad
-(
-    id serial primary key unique,
-    direccion varchar(255) not null,
-    disponible boolean default TRUE,
-    precio decimal default 0 not null,
-    fecha_creacion timestamp,
-    area decimal default 0 not null,
-    unidades_area varchar(10) default 'KM2'   not null,
-    disposicion_propiedad varchar(55) default 'VENTA',
-    id_vivienda varchar(55)
-        constraint propiedad_vivienda_id_fk
-            references vivienda,
-    id_edificio varchar(55)
-        constraint propiedad_edificio_id_fk
-            references edificio,
-    id_bodega varchar(55)
-        constraint propiedad_bodega_id_fk
-            references bodega,
-    id_lote varchar(55)
-        constraint propiedad_lote_id_fk
-            references lote,
-    id_parqueadero varchar(55)
-        constraint propiedad_parqueadero_fk
-            references parqueadero
+    tipo varchar(55),
+    id_propiedad integer not null
+        constraint bodega_propiedad_id_fk
+            references propiedad
 );
 
 create table rol

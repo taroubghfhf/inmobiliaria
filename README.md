@@ -22,7 +22,7 @@ docker run --name inm-container -e POSTGRES_PASSWORD=password -e POSTGRES_USER=p
 ```
 - Copiar el script sql al contenedor
 ```
-docker cp .\inmobiliaria\inmobiliaria\src\main\java\co\edu\uniquindio\inmobiliaria\utilidad\db.sql inm-container:/docker-entrypoint-initdb.d/
+docker cp .\inmobiliaria\src\main\java\co\edu\uniquindio\inmobiliaria\utilidad\db.sql inm-container:/docker-entrypoint-initdb.d/
 ```
 - Ejecutar el script sql
 ```
