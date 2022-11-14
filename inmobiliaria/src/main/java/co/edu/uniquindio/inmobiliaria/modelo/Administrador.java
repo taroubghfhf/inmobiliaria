@@ -4,15 +4,12 @@ import co.edu.uniquindio.inmobiliaria.utilidad.Conexion;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.util.List;
 
 @Getter
 @Setter
 public class Administrador extends Persona{
-
     private List<Empleado> empleados;
     private Usuario usuario;
 
@@ -115,6 +112,30 @@ public class Administrador extends Persona{
         }catch(Exception e){
             System.out.println(e.getMessage());
             return false;
+        }
+    }
+
+    public void consultarEmpleados() {
+        try{
+            Conexion cx =  new Conexion();
+            Connection con = cx.getConexion();
+
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery("SELECT id as documento, nombre, celular FROM empleado");
+            while (rs.next()) {
+                int documento = rs.getInt(1);
+                String nombre = rs.getString(2);
+                String celular = rs.getString(3);
+//                Empleado empleado = new Empleado(nombre, documento, celular);
+//                empleados.add(empleado);
+                System.out.println("Documento: "+documento+", Nombre: "+nombre+", Celular: "+celular);
+            }
+            rs.close();
+            st.close();
+
+            con.close();
+        }catch(Exception e){
+            System.out.println(e.getMessage());
         }
     }
 }

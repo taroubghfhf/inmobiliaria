@@ -2,6 +2,11 @@ package co.edu.uniquindio.inmobiliaria.modelo;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class AdministradorTest {
@@ -13,6 +18,13 @@ class AdministradorTest {
         Usuario empleUsuario = new Usuario("emple1@inmo.com", "clave", "frase", true);
         Empleado empleado = new Empleado("emple1", 1, "300", empleUsuario);
         assertTrue(admin.registrarEmpleado(empleado));
+    }
+
+    @Test
+    void consultarEmpleados() {
+        Usuario adminUser = new Usuario("admin", "clave", "frase", true);
+        Administrador admin = new Administrador("admin", 1, "300", adminUser);
+        admin.consultarEmpleados();
     }
 
     @Test

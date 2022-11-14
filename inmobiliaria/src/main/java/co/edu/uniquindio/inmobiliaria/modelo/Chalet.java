@@ -4,9 +4,7 @@ import co.edu.uniquindio.inmobiliaria.utilidad.Conexion;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.time.LocalDateTime;
 
 @Getter
@@ -29,7 +27,7 @@ public class Chalet extends Casa{
         this.gasDomiciliario = gasDomiciliario;
     }
 
-    public boolean registrarChalet(String id_casa) {
+    public boolean registrarChalet() {
         try{
             Conexion cx =  new Conexion();
             Connection con = cx.getConexion();
@@ -42,7 +40,7 @@ public class Chalet extends Casa{
             st.setBoolean(5, this.internet);
             st.setBoolean(6, this.energiaElectrica);
             st.setBoolean(7, this.gasDomiciliario);
-            st.setString(8, id_casa);
+            st.setString(8, this.getIdentificador());
 
             st.executeUpdate();
             st.close();
@@ -54,4 +52,5 @@ public class Chalet extends Casa{
             return false;
         }
     }
+
 }

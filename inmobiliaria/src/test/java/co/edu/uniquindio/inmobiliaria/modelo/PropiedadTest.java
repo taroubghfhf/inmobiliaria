@@ -44,7 +44,9 @@ class PropiedadTest {
         TipoArea t = TipoArea.M2;
         LocalDateTime fecha = LocalDateTime.now();
         Apartamento a = new Apartamento("apartamento1", "Calle 123", true, 5000.0, empleado, fecha, dp, 20.5f, t, 2, 2, "material", true, true, 3, 50f, 1);
-        assertTrue(a.registrarApartamento());
+        int id_propiedad = a.registrarPropiedad();
+        int id_vivienda = a.registrarVivienda(id_propiedad);
+        assertTrue(a.registrarApartamento(id_vivienda));
     }
 
     @Test
@@ -55,7 +57,9 @@ class PropiedadTest {
         TipoArea t = TipoArea.M2;
         LocalDateTime fecha = LocalDateTime.now();
         Casa c = new Casa("casa1", "Calle 123", true, 5000.0, empleado, fecha, dp, 20.5f, t, 2, 2, 2, "material casa");
-        assertTrue(c.registrarCasa());
+        int id_propiedad = c.registrarPropiedad();
+        int id_vivienda = c.registrarVivienda(id_propiedad);
+        assertTrue(c.registrarCasa(id_vivienda));
     }
 
     @Test
@@ -66,6 +70,9 @@ class PropiedadTest {
         TipoArea t = TipoArea.M2;
         LocalDateTime fecha = LocalDateTime.now();
         Chalet c = new Chalet("chalet1", "Calle 123", true, 5000.0, empleado, fecha, dp, 20.5f, t, 2, 2, 2, "material chalet", false, true, true, true, true, false);
+        int id_propiedad = c.registrarPropiedad();
+        int id_vivienda = c.registrarVivienda(id_propiedad);
+        c.registrarCasa(id_vivienda);
         assertTrue(c.registrarChalet());
     }
 
@@ -78,7 +85,8 @@ class PropiedadTest {
         TipoBodegaLote tb = TipoBodegaLote.URBANA;
         LocalDateTime fecha = LocalDateTime.now();
         Bodega b = new Bodega("bodega1", "Calle 123", true, 5000.0, empleado, fecha, dp, 20.5f, t, tb);
-        assertTrue(b.registrarBodega());
+        int id_propiedad = b.registrarPropiedad();
+        assertTrue(b.registrarBodega(id_propiedad));
     }
 
     @Test
@@ -89,7 +97,8 @@ class PropiedadTest {
         TipoArea t = TipoArea.M2;
         LocalDateTime fecha = LocalDateTime.now();
         Edificio e = new Edificio("edificio1", "Calle 123", true, 5000.0, empleado, fecha, dp, 20.5f, t, 7);
-        assertTrue(e.registrarEdificio());
+        int id_propiedad = e.registrarPropiedad();
+        assertTrue(e.registrarEdificio(id_propiedad));
     }
 
     @Test
@@ -101,7 +110,8 @@ class PropiedadTest {
         TipoArea t = TipoArea.M2;
         LocalDateTime fecha = LocalDateTime.now();
         Lote l = new Lote("lote1", "Calle 123", true, 5000.0, empleado, fecha, dp, 20.5f, t, tb);
-        assertTrue(l.registrarLote());
+        int id_propiedad = l.registrarPropiedad();
+        assertTrue(l.registrarLote(id_propiedad));
     }
 
     @Test
@@ -112,11 +122,12 @@ class PropiedadTest {
         TipoArea t = TipoArea.M2;
         LocalDateTime fecha = LocalDateTime.now();
         Parqueadero p = new Parqueadero("parqueadero1", "Calle 123", true, 5000.0, empleado, fecha, dp, 20.5f, t);
-        assertTrue(p.registrarParqueadero());
+        int id_propiedad = p.registrarPropiedad();
+        assertTrue(p.registrarParqueadero(id_propiedad));
     }
 
     @Test
-    void alquilarPropiedad() {
+    void alquilarLote() {
         Usuario empleUser = new Usuario("emple1@inmo.com", "password", "frase_emple", true);
         Empleado empleado = new Empleado("empleado1", 1, "300", empleUser);
         Cliente cliente = new Cliente("cliente1", 1, "300");
@@ -128,13 +139,11 @@ class PropiedadTest {
         l.setCliente(cliente);
         l.setDisponible(false);
         l.setFechaModificacion(LocalDateTime.now());
-        int consul = l.consultarPropiedad(l.getIdentificador(), "id_lote");
-        boolean dispo = l.consultarDisponibilidadPropiedad(l.getIdentificador(), "id_lote");
-        if(consul > 0 && dispo) assertTrue(l.alquilarPropiedad(l.getIdentificador(), "id_lote"));
+        assertTrue(l.alquilarLote(l.getIdentificador()));
     }
 
     @Test
-    void venderPropiedad() {
+    void venderEdificio() {
         Usuario empleUser = new Usuario("emple1@inmo.com", "password", "frase_emple", true);
         Empleado empleado = new Empleado("empleado1", 1, "300", empleUser);
         Cliente cliente = new Cliente("cliente1", 1, "300");
@@ -146,15 +155,11 @@ class PropiedadTest {
         e.setCliente(cliente);
         e.setPropietario(propietario);
         e.setFechaModificacion(LocalDateTime.now());
-        String id = e.getIdentificador();
-        int consul = e.consultarPropiedad(e.getIdentificador(), "id_lote");
-        boolean dispo = e.consultarDisponibilidadPropiedad(e.getIdentificador(), "id_lote");
-        if(consul > 0 && dispo) assertTrue(e.venderPropiedad(id, "id_edificio"));
+        assertTrue(e.venderEdificio(e.getIdentificador()));
     }
 
     @Test
-    void retirarPropiedad() {
-
+    void retirarChalet() {
         Usuario empleUser = new Usuario("emple1@inmo.com", "password", "frase_emple", true);
         Empleado empleado = new Empleado("empleado1", 1, "300", empleUser);
         DisposicionPropiedad dp = DisposicionPropiedad.ALQUILER;
@@ -162,29 +167,17 @@ class PropiedadTest {
         LocalDateTime fecha = LocalDateTime.now();
         Chalet c = new Chalet("chalet1", "Calle 123", true, 5000.0, empleado, fecha, dp, 20.5f, t, 2, 2, 2, "material chalet", false, true, true, true, true, false);
         c.setFechaModificacion(LocalDateTime.now());
-        boolean dispo = c.consultarDisponibilidadPropiedad(c.getIdentificador(), "id_lote");
-        if(!dispo) assertTrue(c.retirarPropiedad(c.getIdentificador(), "id_vivienda"));
+        assertTrue(c.retirarCasa(c.getIdentificador()));
     }
 
     @Test
-    void consultarDisponibilidadPropiedad() {
+    void consultarDisponibilidadCasa() {
         Usuario empleUser = new Usuario("emple1@inmo.com", "password", "frase_emple", true);
         Empleado empleado = new Empleado("empleado1", 1, "300", empleUser);
         DisposicionPropiedad dp = DisposicionPropiedad.ALQUILER;
         TipoArea t = TipoArea.M2;
         LocalDateTime fecha = LocalDateTime.now();
         Casa c = new Casa("casa1", "Calle 123", true, 5000.0, empleado, fecha, dp, 20.5f, t, 2, 2, 2, "material casa");
-        assertTrue(c.consultarDisponibilidadPropiedad(c.getIdentificador(), "id_vivienda"));
-    }
-
-    @Test
-    void consultarPropiedad() {
-        Usuario empleUser = new Usuario("emple1@inmo.com", "password", "frase_emple", true);
-        Empleado empleado = new Empleado("empleado1", 1, "300", empleUser);
-        DisposicionPropiedad dp = DisposicionPropiedad.ALQUILER;
-        TipoArea t = TipoArea.M2;
-        LocalDateTime fecha = LocalDateTime.now();
-        Casa c = new Casa("casa1", "Calle 123", true, 5000.0, empleado, fecha, dp, 20.5f, t, 2, 2, 2, "material casa");
-        assertEquals(1, c.consultarPropiedad(c.getIdentificador(), "id_vivienda"));
+        assertTrue(c.consultarDisponibilidadCasa(c.getIdentificador()));
     }
 }
