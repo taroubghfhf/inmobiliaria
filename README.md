@@ -4,7 +4,7 @@ Sistema de gestión de una inmobiliaria.
 - Instalar [Docker Desktop](https://www.docker.com/products/docker-desktop/)
 
 - Clonar el repositorio
-```sh
+```
  git clone https://github.com/taroubghfhf/inmobiliaria.git
 ```
 - Ingresar al directorio del repositorio
