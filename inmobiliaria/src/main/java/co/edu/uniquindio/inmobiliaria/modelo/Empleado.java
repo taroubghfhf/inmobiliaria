@@ -11,9 +11,6 @@ import java.util.List;
 @Getter
 @Setter
 public class Empleado extends Persona {
-
-    private List<Propiedad> propedades;
-    private List<Propietario> propietarios;
     private Usuario usuario;
 
     public Empleado(String nombre, Integer documento, String celular, Usuario usuario) {
