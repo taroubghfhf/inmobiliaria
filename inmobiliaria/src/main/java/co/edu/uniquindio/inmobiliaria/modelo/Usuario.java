@@ -25,24 +25,28 @@ public class Usuario {
         this.estado = estado;
     }
 
-    public boolean registrarUsuario(int rol) {
+    public int registrarUsuario(int rol) {
         try{
             Conexion cx =  new Conexion();
             Connection con = cx.getConexion();
 
-            PreparedStatement st = con.prepareStatement("INSERT INTO usuario (email, password, id_rol, frase) VALUES(?,?,?,?)");
+            PreparedStatement st = con.prepareStatement("INSERT INTO usuario (email, password, frase, id_rol) VALUES(?,?,?,?) RETURNING id", Statement.RETURN_GENERATED_KEYS);
             st.setString(1, this.getCorreo());
             st.setString(2, this.getClave());
-            st.setInt(3, rol);
-            st.setString(4, this.getFraseSeguridad());
+            st.setString(3, this.getFraseSeguridad());
+            st.setInt(4, rol);
             st.executeUpdate();
+            ResultSet rs = st.getGeneratedKeys();
+            int id = 0;
+            if (rs.next()) id = rs.getInt(1);
+            st.close();
             st.close();
 
             con.close();
-            return true;
+            return id;
         }catch(Exception e){
             System.out.println(e.getMessage());
-            return false;
+            return -1;
         }
     }
 
@@ -65,6 +69,28 @@ public class Usuario {
         }catch(Exception e){
             System.out.println(e.getMessage());
             return 0;
+        }
+    }
+
+    public boolean consultarEstadoUsuario(String correo) {
+        try{
+            Conexion cx =  new Conexion();
+            Connection con = cx.getConexion();
+            boolean count = false;
+
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery("SELECT estado FROM usuario WHERE email = '"+correo+"'");
+            while (rs.next()) {
+                count = rs.getBoolean(1);
+            }
+            rs.close();
+            st.close();
+
+            con.close();
+            return count;
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+            return false;
         }
     }
 

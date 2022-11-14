@@ -25,8 +25,7 @@ public class Administrador extends Persona{
         try{
             Conexion cx =  new Conexion();
             Connection con = cx.getConexion();
-            empleado.getUsuario().registrarUsuario(2);
-            int user_id = this.usuario.consultarUsuario(empleado.getUsuario().getCorreo());
+            int user_id = empleado.getUsuario().registrarUsuario(2);
 
             PreparedStatement st = con.prepareStatement("INSERT INTO empleado (id, nombre, celular, id_usuario) VALUES(?,?,?,?)");
             st.setInt(1, empleado.getDocumento());
@@ -67,7 +66,8 @@ public class Administrador extends Persona{
 
     public boolean desactivarEmpleado(Empleado empleado) {
         try{
-            if(empleado.getUsuario().consultarUsuario(empleado.getUsuario().getCorreo()) > 0) {
+            String correo = empleado.getUsuario().getCorreo();
+            if(empleado.getUsuario().consultarUsuario(correo) > 0 && empleado.getUsuario().consultarEstadoUsuario(correo)) {
                 Conexion cx =  new Conexion();
                 Connection con = cx.getConexion();
 
