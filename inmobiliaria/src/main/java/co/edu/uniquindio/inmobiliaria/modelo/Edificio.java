@@ -4,9 +4,7 @@ import co.edu.uniquindio.inmobiliaria.utilidad.Conexion;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.time.LocalDateTime;
 
 @Setter
@@ -34,6 +32,134 @@ public class Edificio extends Propiedad{
 
             con.close();
             return true;
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean alquilarEdificio(String id) {
+        try{
+            if(consultarDisponibilidadEdificio(id)) {
+                Conexion cx =  new Conexion();
+                Connection con = cx.getConexion();
+
+                int id_propiedad = 0;
+                Statement st = con.createStatement();
+                ResultSet rs = st.executeQuery("UPDATE propiedad p\n" +
+                        "SET disponible = 'false'\n" +
+                        "FROM edificio e\n" +
+                        "WHERE (e.id_propiedad = p.id AND e.id = '"+id+"') RETURNING p.id");
+
+                if(rs.next()) id_propiedad = rs.getInt(1);
+                rs.close();
+                st.close();
+
+                PreparedStatement st2 = con.prepareStatement("UPDATE historial_propiedad SET " +
+                        "id_cliente = "+this.getCliente().getDocumento()+", " +
+                        "fecha_modificacion = '"+this.getFechaModificacion()+"' " +
+                        "WHERE id_propiedad = "+id_propiedad+"");
+
+                st2.executeUpdate();
+                st2.close();
+
+                con.close();
+                return true;
+            }
+            return false;
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean venderEdificio(String id) {
+        try{
+            if(consultarDisponibilidadEdificio(id)) {
+                Conexion cx =  new Conexion();
+                Connection con = cx.getConexion();
+
+                int id_propiedad = 0;
+                Statement st = con.createStatement();
+                ResultSet rs = st.executeQuery("UPDATE propiedad p\n" +
+                        "SET disponible = 'false'\n" +
+                        "FROM edificio e\n" +
+                        "WHERE (e.id_propiedad = p.id AND e.id = '"+id+"') RETURNING p.id");
+
+                if(rs.next()) id_propiedad = rs.getInt(1);
+                rs.close();
+                st.close();
+
+                PreparedStatement st2 = con.prepareStatement("UPDATE historial_propiedad SET" +
+                        "id_propietario= "+ this.getPropietario().getDocumento() +", " +
+                        "id_cliente= "+ this.getCliente().getDocumento() +", " +
+                        "fecha_modificacion='"+this.getFechaModificacion()+"' " +
+                        "WHERE id_propiedad = "+id_propiedad+"");
+
+                st2.executeUpdate();
+                st2.close();
+
+                con.close();
+                return true;
+            }
+            return false;
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean retirarEdificio(String id) {
+        try{
+            if(consultarDisponibilidadEdificio(id)) {
+                Conexion cx =  new Conexion();
+                Connection con = cx.getConexion();
+
+                int id_propiedad = 0;
+                Statement st = con.createStatement();
+                ResultSet rs = st.executeQuery("UPDATE propiedad p\n" +
+                        "SET disponible = 'false'\n" +
+                        "FROM edificio e\n" +
+                        "WHERE (e.id_propiedad = p.id AND e.id = '"+id+"') RETURNING p.id");
+
+                if(rs.next()) id_propiedad = rs.getInt(1);
+                rs.close();
+                st.close();
+
+                PreparedStatement st2 = con.prepareStatement("UPDATE historial_propiedad SET" +
+                        "fecha_modificacion='"+this.getFechaModificacion()+"' " +
+                        "WHERE id_propiedad = "+id_propiedad+"");
+
+                st2.executeUpdate();
+                st2.close();
+
+                con.close();
+                return true;
+            }
+            return false;
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean consultarDisponibilidadEdificio(String id) {
+        try{
+            Conexion cx =  new Conexion();
+            Connection con = cx.getConexion();
+            boolean r = false;
+
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery("SELECT p.disponible\n" +
+                    "FROM propiedad p\n" +
+                    "INNER JOIN edificio e on p.id = e.id_propiedad\n" +
+                    "WHERE e.id = '"+id+"'");
+            if(rs.next()) r = rs.getBoolean(1);
+            rs.close();
+            st.close();
+
+            con.close();
+            return r;
         }catch(Exception e){
             System.out.println(e.getMessage());
             return false;

@@ -21,7 +21,4 @@ public class Persona {
         this.documento = documento;
         this.celular = celular;
     }
-
-    public Persona() {
-    }
 }

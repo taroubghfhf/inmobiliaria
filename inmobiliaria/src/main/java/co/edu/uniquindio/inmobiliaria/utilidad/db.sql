@@ -1,19 +1,19 @@
 create table propiedad
 (
-    id serial not null primary key unique,
+    id serial primary key unique,
     direccion varchar(255) not null,
     disponible boolean default TRUE,
-    precio decimal default 0 not null,
+    precio decimal not null,
     fecha_creacion timestamp,
-    area decimal default 0 not null,
-    unidades_area varchar(10) default 'KM2'   not null,
+    area decimal not null,
+    unidades_area varchar(10) not null,
     disposicion_propiedad varchar(55) default 'VENTA',
     tipo_propiedad varchar(55) not null
 );
 
 create table vivienda
 (
-    id serial not null primary key unique,
+    id serial primary key unique,
     numero_habitaciones integer,
     numero_banos integer,
     material varchar(255),
